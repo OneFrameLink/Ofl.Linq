@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Ofl.Linq
 {
@@ -11,8 +10,11 @@ namespace Ofl.Linq
             // Validate parameters.
             if (source == null) throw new ArgumentNullException(nameof(source));
 
-            // Call Do with an empty action.
-            source.Do(t => { });
+            // Get the enumerator.
+            using (IEnumerator<T> enumerator = source.GetEnumerator())
+                // Drain.
+                while (enumerator.MoveNext())
+                    ;
         }
     }
 }

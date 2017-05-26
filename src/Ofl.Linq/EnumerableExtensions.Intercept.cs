@@ -6,7 +6,7 @@ namespace Ofl.Linq
 {
     public static partial class EnumerableExtensions
     {
-        public static IEnumerable<T> Do<T>(this IEnumerable<T> source, Action<T> action)
+        public static IEnumerable<T> Intercept<T>(this IEnumerable<T> source, Action<T> action)
         {
             // Validate parameters.
             if (source == null) throw new ArgumentNullException(nameof(source));
