@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Ofl.Linq
 {
-    public struct Window<T>
+    public readonly struct Window<T>
     {
         #region Constructor
 

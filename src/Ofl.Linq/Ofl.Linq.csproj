@@ -8,5 +8,11 @@
     <RepositoryUrl>https://github.com/OneFrameLink/Ofl.Linq.git</RepositoryUrl>
     <Version>1.1.0</Version>
     <PackageTags>linq enumerable</PackageTags>
+
+    <!-- Declare that the Repository URL can be published to NuSpec -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>    
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-62925-02" PrivateAssets="All"/>
+  </ItemGroup>
 </Project>

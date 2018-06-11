@@ -17,12 +17,10 @@ namespace Ofl.Linq
 
             // Start sniffing.
             // Read-only collection.
-            var ro = source as IReadOnlyCollection<T>;
-            if (ro != null) return ro.ReadOnlyCollectionTakeLast(count);
+            if (source is IReadOnlyCollection<T> ro) return ro.ReadOnlyCollectionTakeLast(count);
 
             // Collection.
-            var c = source as ICollection<T>;
-            if (c != null) return c.CollectionTakeLast(count);
+            if (source is ICollection<T> c) return c.CollectionTakeLast(count);
 
             // Default.
             return source.EnumerableTakeLast(count);
@@ -73,6 +71,7 @@ namespace Ofl.Linq
             // collection count minus the count desired.
             return source.Skip(source.Count - count);
         }
+
         private static IEnumerable<T> ReadOnlyCollectionTakeLast<T>(this IReadOnlyCollection<T> source, int count)
         {
             // Validate parameters.
