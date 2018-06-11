@@ -8,5 +8,12 @@
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 	  <Copyright>Copyright &#169; 2018 One Frame Link</Copyright>
     <LangVersion>latest</LangVersion>
+
+    <!-- Sourcelink -->
+    <!-- Declare that the Repository URL can be published to NuSpec -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+
+    <!-- Include PDB in the built .nupkg -->
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 </Project>
