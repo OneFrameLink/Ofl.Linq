@@ -12,7 +12,7 @@ namespace Ofl.Linq
             if (source == null) throw new ArgumentNullException(nameof(source));
             if (harvester == null) throw new ArgumentNullException(nameof(harvester));
 
-            // Add a select in between which calls Add on the harester.
+            // Add a select in between which calls Add on the harvester.
             return source.Select(i => { harvester.Add(i); return i; });
         }
     }
