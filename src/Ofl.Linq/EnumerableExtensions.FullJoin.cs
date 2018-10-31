@@ -23,35 +23,47 @@ namespace Ofl.Linq
             if (innerKeySelector == null) throw new ArgumentNullException(nameof(innerKeySelector));
             if (equalityComparer == null) throw new ArgumentNullException(nameof(equalityComparer));
 
-            // Materialize the inner.
-            IDictionary<TKey, TInner> mappedRight = inner.ToDictionary(innerKeySelector, equalityComparer);
+            // Get a dictionary of groupings.
+            IDictionary<TKey, TInner[]> innerLookup = inner
+                .GroupBy(innerKeySelector, equalityComparer)
+                .ToDictionary(g => g.Key, g => g.ToArray(), equalityComparer);
+
+            // The set of keys that were hit.
+            ISet<TKey> matchedKeys = new HashSet<TKey>(equalityComparer);
 
             // The implementation.
-            IEnumerable<(TOuter, TInner)> Implementation()
-            {
+            IEnumerable<(TOuter, TInner)> Implementation() {
                 // Cycle through the items.
-                foreach (TOuter leftItem in outer)
+                foreach (TOuter outerItem in outer)
                 {
                     // The key.
-                    TKey key = outerKeySelector(leftItem);
+                    TKey key = outerKeySelector(outerItem);
 
-                    // Look up the item.
-                    if (mappedRight.TryGetValue(key, out TInner rightItem))
+                    // Try and get the array of items.
+                    if (innerLookup.TryGetValue(key, out TInner[] innerArray))
                     {
-                        // Yield the pair.
-                        yield return (leftItem, rightItem);
+                        // Yield the entire sequence for the left.
+                        foreach (TInner innerItem in innerArray)
+                            yield return (outerItem, innerItem);
 
-                        // Remove the inner item from the dictionary.
-                        mappedRight.Remove(key);
+                        // Add the item to the matched keys.
+                        matchedKeys.Add(key);
                     }
                     else
-                        // Yield just the outer.
-                        yield return (leftItem, default);
+                        // Yield just the outer item with the default.
+                        yield return (outerItem, default);
                 }
 
-                // Yield the remaining inner items, outer for null.
-                foreach (TInner rightItem in mappedRight.Values)
-                    yield return (default, rightItem);
+                // The remainder.
+                // Everything in the inner lookup keys that
+                // has not been matched.
+                IEnumerable<TInner> remainingItems = innerLookup.Keys
+                    .Where(k => !matchedKeys.Contains(k))
+                    .SelectMany(k => innerLookup[k]);
+
+                // Yield.
+                foreach (TInner remainingItem in remainingItems)
+                    yield return (default, remainingItem);
             }
 
             // Return.

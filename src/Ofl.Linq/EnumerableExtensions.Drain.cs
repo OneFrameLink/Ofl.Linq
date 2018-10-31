@@ -14,7 +14,7 @@ namespace Ofl.Linq
             using (IEnumerator<T> enumerator = source.GetEnumerator())
                 // Drain.
                 while (enumerator.MoveNext())
-                    ;
+                { }
         }
     }
 }
