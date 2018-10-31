@@ -5,7 +5,9 @@ using Xunit;
 
 namespace Ofl.Linq.Tests
 {
-    public partial class EnumerableExtensionsTests
+    // ReSharper disable InconsistentNaming
+    public class EnumerableExtensionsTests_Window
+    // ReSharper restore InconsistentNaming
     {
         #region Helpers.
 

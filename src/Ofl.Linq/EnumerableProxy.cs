@@ -16,7 +16,7 @@ namespace Ofl.Linq
 
         #endregion
 
-        #region Private, reado-only state.
+        #region Private, read-only state.
 
         private readonly IEnumerable<T> _enumerable;
 

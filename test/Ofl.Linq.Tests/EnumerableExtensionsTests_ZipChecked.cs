@@ -5,7 +5,9 @@ using Xunit;
 
 namespace Ofl.Linq.Tests
 {
-    public partial class EnumerableExtensionsTests
+    // ReSharper disable InconsistentNaming
+    public class EnumerableExtensionsTests_ZipChecked
+    // ReSharper restore InconsistentNaming
     {
         [Theory]
         [InlineData(0)]

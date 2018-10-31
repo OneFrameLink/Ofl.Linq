@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Xunit;
 
 namespace Ofl.Linq.Tests
 {
-    public partial class EnumerableExtensionsTests
+    // ReSharper disable InconsistentNaming
+    public class EnumerableExtensionsTests_HasAtMost
+    // ReSharper restore InconsistentNaming
     {
         #region Helpers.
 
