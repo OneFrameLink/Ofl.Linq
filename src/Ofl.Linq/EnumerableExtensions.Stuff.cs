@@ -8,7 +8,7 @@ namespace Ofl.Linq
     public static partial class EnumerableExtensions
     {
         public static IEnumerable<T> Stuff<T>(this IEnumerable<T> source, params T[] stuffing) =>
-            source.Stuff((IEnumerable<T>) stuffing);
+            source.Stuff(stuffing.AsEnumerable());
 
         public static IEnumerable<T> Stuff<T>(this IEnumerable<T> source, IEnumerable<T> stuffing)
         {
@@ -42,32 +42,33 @@ namespace Ofl.Linq
             Debug.Assert(source != null);
 
             // The materialized stuffing.  Get here.
-            IList<T> materializedStuffing = stuffing.ToList();
+            // TODO: Check read only implementations, etc; get
+            // out of having to materialize it if possible.
+            IReadOnlyCollection<T> materializedStuffing = stuffing.ToList();
 
             // Get the enumerator.
-            using (IEnumerator<T> enumerator = source.GetEnumerator())
+            using IEnumerator<T> enumerator = source.GetEnumerator();
+
+            // Move to the next item.  If it fails, return.
+            if (!enumerator.MoveNext()) yield break;
+
+            // Yield the current item.
+            yield return enumerator.Current;
+
+            // Cycle while true.
+            while (true)
             {
-                // Move to the next item.  If it fails, return.
-                if (!enumerator.MoveNext()) yield break;
+                // Move to the next item.  If there's nothing to move to
+                // then break.
+                if (!enumerator.MoveNext()) break;
+
+                // There's an item to yield.
+                // Yield the stuffing first.
+                foreach (T stuff in materializedStuffing)
+                    yield return stuff;
 
                 // Yield the current item.
                 yield return enumerator.Current;
-
-                // Cycle while true.
-                while (true)
-                {
-                    // Move to the next item.  If there's nothing to move to
-                    // then break.
-                    if (!enumerator.MoveNext()) break;
-
-                    // There's an item to yield.
-                    // Yield the stuffing first.
-                    foreach (T stuff in materializedStuffing)
-                        yield return stuff;
-
-                    // Yield the current item.
-                    yield return enumerator.Current;
-                }
             }
         }
     }

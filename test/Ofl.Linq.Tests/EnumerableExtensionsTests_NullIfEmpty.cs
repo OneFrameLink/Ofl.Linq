@@ -13,7 +13,7 @@ namespace Ofl.Linq.Tests
         public void Test_Null_If_Empty()
         {
             // Create the sequences.
-            IEnumerable<int> empty = Enumerable.Empty<int>();
+            IEnumerable<int>? empty = Enumerable.Empty<int>();
 
             // Filter.
             empty = empty.NullIfEmpty();
@@ -35,7 +35,7 @@ namespace Ofl.Linq.Tests
                 $"The {nameof(count)} parameter must be a positive value.");
 
             // Create the sequence.
-            IEnumerable<int> sequence = Enumerable.Range(0, count);
+            IEnumerable<int>? sequence = Enumerable.Range(0, count);
 
             // Filter.
             sequence = sequence.NullIfEmpty();
@@ -60,7 +60,7 @@ namespace Ofl.Linq.Tests
                 $"The {nameof(count)} parameter must be a positive value.");
 
             // Create the sequence.  Need to materialize so it's supported.
-            IEnumerable<int> sequence = Enumerable.Range(0, count).ToList();
+            IEnumerable<int>? sequence = Enumerable.Range(0, count).ToList();
 
             // Filter.
             sequence = sequence.NullIfEmpty();
@@ -69,17 +69,16 @@ namespace Ofl.Linq.Tests
             Assert.NotNull(sequence);
 
             // Get the enumerator.
-            using (IEnumerator<int> enumerator = sequence.GetEnumerator())
-            {
-                // First time, this will skip.
-                Assert.True(Enumerable.Range(0, count).SequenceEqual(enumerator.ToEnumerable()));
+            using IEnumerator<int> enumerator = sequence!.GetEnumerator();
 
-                // Reset.
-                enumerator.Reset();
+            // First time, this will skip.
+            Assert.True(Enumerable.Range(0, count).SequenceEqual(enumerator.ToEnumerable()));
 
-                // This will not skip, but it will not matter.
-                Assert.True(Enumerable.Range(0, count).SequenceEqual(enumerator.ToEnumerable()));
-            }
+            // Reset.
+            enumerator.Reset();
+
+            // This will not skip, but it will not matter.
+            Assert.True(Enumerable.Range(0, count).SequenceEqual(enumerator.ToEnumerable()));
         }
     }
 }

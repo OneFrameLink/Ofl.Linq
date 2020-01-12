@@ -24,16 +24,17 @@ namespace Ofl.Linq
             if (size <= 0) throw new ArgumentOutOfRangeException(nameof(size), size, $"The { nameof(size) } parameter must be a positive value.");
 
             // Get the enumerator.  Dispose of when done.
-            using (IEnumerator<T> enumerator = source.GetEnumerator())
-                do
-                {
-                    // Move to the next element.  If there's nothing left
-                    // then get out.
-                    if (!enumerator.MoveNext()) yield break;
+            using IEnumerator<T> enumerator = source.GetEnumerator();
 
-                    // Return the chunked sequence.
-                    yield return ChunkSequence(enumerator, size);
-                } while (true);
+            do
+            {
+                // Move to the next element.  If there's nothing left
+                // then get out.
+                if (!enumerator.MoveNext()) yield break;
+
+                // Return the chunked sequence.
+                yield return ChunkSequence(enumerator, size);
+            } while (true);
         }
 
         private static IEnumerable<T> ChunkSequence<T>(IEnumerator<T> enumerator,

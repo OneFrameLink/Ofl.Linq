@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Ofl.Linq
 {
@@ -7,7 +8,7 @@ namespace Ofl.Linq
     {
         #region Constructor
 
-        public Window(T item, IReadOnlyList<T> before, IReadOnlyList<T> after)
+        public Window([AllowNull] T item, IReadOnlyList<T> before, IReadOnlyList<T> after)
         {
             // Validate parameters.
             Behind = before ?? throw new ArgumentNullException(nameof(before));

@@ -59,7 +59,7 @@ namespace Ofl.Linq
             return source.ToDictionary(keySelector, elementSelector).WrapInReadOnlyDictionary();
         }
 
-        public static IReadOnlyDictionary<TKey, TValue> ToReadOnlyDictionary<TKey, TValue>(
+        public static ReadOnlyDictionary<TKey, TValue> ToReadOnlyDictionary<TKey, TValue>(
             this IEnumerable<KeyValuePair<TKey, TValue>> source)
         {
             // Validate parameters.
@@ -70,7 +70,7 @@ namespace Ofl.Linq
                 p => p.Key, p => p.Value, EqualityComparer<TKey>.Default));
         }
 
-        public static IReadOnlyDictionary<TKey, TValue> ToReadOnlyDictionary<TKey, TValue>(
+        public static ReadOnlyDictionary<TKey, TValue> ToReadOnlyDictionary<TKey, TValue>(
             this IEnumerable<KeyValuePair<TKey, TValue>> source, IEqualityComparer<TKey> comparer)
         {
             // Validate parameters.

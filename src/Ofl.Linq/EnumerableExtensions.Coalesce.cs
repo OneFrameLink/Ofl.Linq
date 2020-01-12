@@ -6,10 +6,10 @@ namespace Ofl.Linq
 {
     public static partial class EnumerableExtensions
     {
-        public static T Coalesce<T>(params T[] values)
+        public static T? Coalesce<T>(params T?[] values)
             where T : class => values.Coalesce();
 
-        public static T Coalesce<T>(this IEnumerable<T> source)
+        public static T? Coalesce<T>(this IEnumerable<T?> source)
             where T : class
         {
             // Validate parameters.

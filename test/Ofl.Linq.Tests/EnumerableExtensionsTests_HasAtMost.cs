@@ -19,7 +19,7 @@ namespace Ofl.Linq.Tests
                 $"The {nameof(count)} parameter must be a non-negative value.");
 
             // Was there an exception?
-            Exception exception = null;
+            Exception? exception = null;
 
             // Wrap in a try catch.
             try

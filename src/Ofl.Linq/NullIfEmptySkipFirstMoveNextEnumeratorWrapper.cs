@@ -53,7 +53,7 @@ namespace Ofl.Linq
 
         public T Current => _inner.Current;
 
-        object IEnumerator.Current => Current;
+        object? IEnumerator.Current => Current;
 
         public void Dispose() => _inner.Dispose();
 

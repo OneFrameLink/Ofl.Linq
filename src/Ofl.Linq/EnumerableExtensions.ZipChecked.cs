@@ -16,26 +16,27 @@ namespace Ofl.Linq
             // The implementation.
             IEnumerable<TResult> Implementation() {
                 // Get the enumerators.
-                using (IEnumerator<TFirst> firstEnumerator = first.GetEnumerator())
-                using (IEnumerator<TSecond> secondEnumerator = second.GetEnumerator())
-                    // Will short circuit later.
-                    while (true)
-                    {
-                        // Advance each.
-                        bool firstMoveNext = firstEnumerator.MoveNext();
-                        bool secondMoveNext = secondEnumerator.MoveNext();
+                using IEnumerator<TFirst> firstEnumerator = first.GetEnumerator();
+                using IEnumerator<TSecond> secondEnumerator = second.GetEnumerator();
 
-                        // If both not true, or both not false, throw an exception.
-                        if (firstMoveNext ^ secondMoveNext)
-                            throw new InvalidOperationException($"The { (firstMoveNext ? nameof(first) : nameof(second)) } sequence yielded more elements than the { (firstMoveNext ? nameof(second) : nameof(first)) } sequence.");
+                // Will short circuit later.
+                while (true)
+                {
+                    // Advance each.
+                    bool firstMoveNext = firstEnumerator.MoveNext();
+                    bool secondMoveNext = secondEnumerator.MoveNext();
 
-                        // If there is an item, yield.  If not, break.
-                        if (firstMoveNext)
-                            yield return resultSelector(firstEnumerator.Current, secondEnumerator.Current);
-                        else
-                            // Break, no more elements.
-                            yield break;
-                    }
+                    // If both not true, or both not false, throw an exception.
+                    if (firstMoveNext ^ secondMoveNext)
+                        throw new InvalidOperationException($"The { (firstMoveNext ? nameof(first) : nameof(second)) } sequence yielded more elements than the { (firstMoveNext ? nameof(second) : nameof(first)) } sequence.");
+
+                    // If there is an item, yield.  If not, break.
+                    if (firstMoveNext)
+                        yield return resultSelector(firstEnumerator.Current, secondEnumerator.Current);
+                    else
+                        // Break, no more elements.
+                        yield break;
+                }
             }
 
             // Call the implementation.

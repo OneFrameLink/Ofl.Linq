@@ -10,20 +10,30 @@ namespace Ofl.Linq
         public ReleasableDisposable(T disposable)
         {
             // Assign values.
-            Disposable = disposable;
+            _disposable = disposable;
         }
 
         #endregion
 
         #region Instance state.
 
-        public T Disposable { get; private set; }
+        private T? _disposable;
+
+        public T Disposable
+        {
+            get
+            {
+                return _disposable
+                    ?? throw new InvalidOperationException(
+                        $"Attempted to access the private {nameof(_disposable)} variable which is null.");
+            }
+        }
 
         #endregion
 
         #region Helpers
 
-        public void Release() => Disposable = null;
+        public void Release() => _disposable = null;
 
         #endregion
 
@@ -32,7 +42,7 @@ namespace Ofl.Linq
         public void Dispose()
         {
             // Use the disposable.
-            using (Disposable)
+            using (_disposable)
             { }
         }
 

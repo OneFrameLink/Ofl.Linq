@@ -11,10 +11,11 @@ namespace Ofl.Linq
             if (source == null) throw new ArgumentNullException(nameof(source));
 
             // Get the enumerator.
-            using (IEnumerator<T> enumerator = source.GetEnumerator())
-                // Drain.
-                while (enumerator.MoveNext())
-                { }
+            using IEnumerator<T> enumerator = source.GetEnumerator();
+
+            // Drain.
+            while (enumerator.MoveNext())
+            { }
         }
     }
 }

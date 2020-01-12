@@ -22,7 +22,7 @@ namespace Ofl.Linq
 
         private readonly object _enumeratorLock = new object();
 
-        private IEnumerator<T> _enumerator;
+        private IEnumerator<T>? _enumerator;
 
         #endregion
 
