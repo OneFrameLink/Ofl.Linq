@@ -15,15 +15,12 @@ namespace Ofl.Linq
             // If the count is zero, return empty.
             if (count == 0) return Enumerable.Empty<T>();
 
-            // Start sniffing.
-            // Read-only collection.
-            if (source is IReadOnlyCollection<T> ro) return ro.ReadOnlyCollectionTakeLast(count);
-
-            // Collection.
-            if (source is ICollection<T> c) return c.CollectionTakeLast(count);
-
-            // Default.
-            return source.EnumerableTakeLast(count);
+            // Switch on the source.
+            return source switch {
+                IReadOnlyCollection<T> ro => ro.ReadOnlyCollectionTakeLast(count),
+                ICollection<T> c => c.CollectionTakeLast(count),
+                _ => source.EnumerableTakeLast(count)
+            };
         }
 
         private static IEnumerable<T> EnumerableTakeLast<T>(this IEnumerable<T> source, int count)

@@ -16,7 +16,7 @@ namespace Ofl.Linq
             if (source == null) throw new ArgumentNullException(nameof(source));
             if (stuffing == null) throw new ArgumentNullException(nameof(stuffing));
 
-            // Call the implemenation.
+            // Call the implementation.
             return source.StuffImplementation(stuffing);
         }
 

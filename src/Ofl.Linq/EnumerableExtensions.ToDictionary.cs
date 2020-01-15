@@ -6,11 +6,17 @@ namespace Ofl.Linq
 {
     public static partial class EnumerableExtensions
     {
-        public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> source) =>
-            source.ToDictionary(EqualityComparer<TKey>.Default);
+        public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(
+            this IEnumerable<KeyValuePair<TKey, TValue>> source
+        )
+            where TKey : notnull
+            => source.ToDictionary(EqualityComparer<TKey>.Default);
 
-        public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> source,
-            IEqualityComparer<TKey> equalityComparer)
+        public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(
+            this IEnumerable<KeyValuePair<TKey, TValue>> source,
+            IEqualityComparer<TKey> equalityComparer
+        )
+        where TKey : notnull
         {
             // Validate parameters.
             if (source == null) throw new ArgumentNullException(nameof(source));

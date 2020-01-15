@@ -19,15 +19,10 @@ namespace Ofl.Linq
 
         private T? _disposable;
 
-        public T Disposable
-        {
-            get
-            {
-                return _disposable
-                    ?? throw new InvalidOperationException(
-                        $"Attempted to access the private {nameof(_disposable)} variable which is null.");
-            }
-        }
+        public T Disposable =>
+            _disposable
+            ?? throw new InvalidOperationException(
+                $"Attempted to access the private {nameof(_disposable)} variable which is null.");
 
         #endregion
 

@@ -55,17 +55,16 @@ namespace Ofl.Linq
                     aheadList.Add(enumerator.Current);
 
                     // If the length of the after list is greater than the after amount, pop, yield, then move to before.
-                    if (aheadList.Count > ahead)
-                    {
-                        // Get the window.
-                        Window<T> window = UpdateBeforeYield();
+                    if (aheadList.Count <= ahead) continue;
 
-                        // Yield the window.
-                        yield return window;
+                    // Get the window.
+                    Window<T> window = UpdateBeforeYield();
 
-                        // Update after.
-                        UpdateAfterYield(window.Item);
-                    }
+                    // Yield the window.
+                    yield return window;
+
+                    // Update after.
+                    UpdateAfterYield(window.Item);
                 }
 
                 // Drain the after list.

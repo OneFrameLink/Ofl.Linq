@@ -28,18 +28,14 @@ namespace Ofl.Linq
 
         public bool MoveNext()
         {
-            // If not skipped, skip and return.
-            if (!_skipped)
-            {
-                // Set to true.
-                _skipped = true;
+            // If skipped, then just move next.
+            if (_skipped) return _inner.MoveNext();
 
-                // Return true.
-                return true;
-            }
+            // Start skipping.
+            _skipped = true;
 
-            // Pass through.
-            return _inner.MoveNext();
+            // Return true.
+            return true;
         }
 
         public void Reset()

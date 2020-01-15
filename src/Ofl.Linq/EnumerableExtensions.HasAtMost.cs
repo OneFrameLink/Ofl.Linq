@@ -32,22 +32,21 @@ namespace Ofl.Linq
                 int yielded = 0;
 
                 // Grab the enumerator.
-                using (IEnumerator<T> enumerator = source.GetEnumerator())
+                using IEnumerator<T> enumerator = source.GetEnumerator();
+
+                // Loop the read.
+                while (enumerator.MoveNext())
                 {
-                    // Loop the read.
-                    while (enumerator.MoveNext())
-                    {
-                        // Increment yielded.
-                        yielded++;
+                    // Increment yielded.
+                    yielded++;
 
-                        // If greater than count, throw.
-                        if (yielded > count)
-                            // Throw.
-                            throw CreateException();
+                    // If greater than count, throw.
+                    if (yielded > count)
+                        // Throw.
+                        throw CreateException();
 
-                        // Yield the item.
-                        yield return enumerator.Current;
-                    }
+                    // Yield the item.
+                    yield return enumerator.Current;
                 }
             }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Ofl.Linq
@@ -7,13 +8,46 @@ namespace Ofl.Linq
     public static partial class EnumerableExtensions
     {
         public static IEnumerable<(TOuter Outer, TInner Inner)> FullJoin<TOuter, TInner, TKey>(
-            this IEnumerable<TOuter> outer, IEnumerable<TInner> inner,
-            Func<TOuter, TKey> outerKeySelector, Func<TInner, TKey> innerKeySelector) =>
-            outer.FullJoin(inner, outerKeySelector, innerKeySelector, EqualityComparer<TKey>.Default);
+            this IEnumerable<TOuter> outer,
+            IEnumerable<TInner> inner,
+            Func<TOuter, TKey> outerKeySelector,
+            Func<TInner, TKey> innerKeySelector
+        ) =>
+            outer.FullJoin(
+                inner,
+                outerKeySelector,
+                innerKeySelector,
+                default,
+                default,
+                EqualityComparer<TKey>.Default
+            );
 
         public static IEnumerable<(TOuter Outer, TInner Inner)> FullJoin<TOuter, TInner, TKey>(
-            this IEnumerable<TOuter> outer, IEnumerable<TInner> inner,
-            Func<TOuter, TKey> outerKeySelector, Func<TInner, TKey> innerKeySelector,
+            this IEnumerable<TOuter> outer, 
+            IEnumerable<TInner> inner,
+            Func<TOuter, TKey> outerKeySelector,
+            Func<TInner, TKey> innerKeySelector,
+            [AllowNull]
+            TInner unmatchedInner,
+            [AllowNull]
+            TOuter unmatchedOuter
+        ) =>
+            outer.FullJoin(
+                inner, 
+                outerKeySelector, 
+                innerKeySelector, 
+                unmatchedInner, 
+                unmatchedOuter,
+                EqualityComparer<TKey>.Default
+            );
+
+        public static IEnumerable<(TOuter Outer, TInner Inner)> FullJoin<TOuter, TInner, TKey>(
+            this IEnumerable<TOuter> outer, 
+            IEnumerable<TInner> inner,
+            Func<TOuter, TKey> outerKeySelector, 
+            Func<TInner, TKey> innerKeySelector,
+            TInner unmatchedInner,
+            TOuter unmatchedOuter,
             IEqualityComparer<TKey> equalityComparer)
         {
             // Validate parameters.
@@ -23,10 +57,9 @@ namespace Ofl.Linq
             if (innerKeySelector == null) throw new ArgumentNullException(nameof(innerKeySelector));
             if (equalityComparer == null) throw new ArgumentNullException(nameof(equalityComparer));
 
-            // Get a dictionary of groupings.
-            IDictionary<TKey, TInner[]> innerLookup = inner
-                .GroupBy(innerKeySelector, equalityComparer)
-                .ToDictionary(g => g.Key, g => g.ToArray(), equalityComparer);
+            // Get a lookup.
+            ILookup<TKey, TInner> innerLookup = inner
+                .ToLookup(innerKeySelector, equalityComparer);
 
             // The set of keys that were hit.
             ISet<TKey> matchedKeys = new HashSet<TKey>(equalityComparer);
@@ -40,10 +73,10 @@ namespace Ofl.Linq
                     TKey key = outerKeySelector(outerItem);
 
                     // Try and get the array of items.
-                    if (innerLookup.TryGetValue(key, out TInner[] innerArray))
+                    if (innerLookup.Contains(key))
                     {
                         // Yield the entire sequence for the left.
-                        foreach (TInner innerItem in innerArray)
+                        foreach (TInner innerItem in innerLookup[key])
                             yield return (outerItem, innerItem);
 
                         // Add the item to the matched keys.
@@ -51,19 +84,19 @@ namespace Ofl.Linq
                     }
                     else
                         // Yield just the outer item with the default.
-                        yield return (outerItem, default);
+                        yield return (outerItem, unmatchedInner);
                 }
 
                 // The remainder.
                 // Everything in the inner lookup keys that
                 // has not been matched.
-                IEnumerable<TInner> remainingItems = innerLookup.Keys
-                    .Where(k => !matchedKeys.Contains(k))
-                    .SelectMany(k => innerLookup[k]);
+                IEnumerable<TInner> remainingItems = innerLookup
+                    .Where(g => !matchedKeys.Contains(g.Key))
+                    .SelectMany(g => innerLookup[g.Key]);
 
                 // Yield.
                 foreach (TInner remainingItem in remainingItems)
-                    yield return (default, remainingItem);
+                    yield return (unmatchedOuter, remainingItem);
             }
 
             // Return.

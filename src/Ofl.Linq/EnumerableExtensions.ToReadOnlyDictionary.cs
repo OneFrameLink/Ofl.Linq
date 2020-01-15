@@ -8,7 +8,9 @@ namespace Ofl.Linq
     public static partial class EnumerableExtensions
     {
         public static ReadOnlyDictionary<TKey, TValue> ToReadOnlyDictionary<TKey, TValue>(
-            this IEnumerable<TValue> source, Func<TValue, TKey> keySelector)
+            this IEnumerable<TValue> source, Func<TValue, TKey> keySelector
+        )
+        where TKey : notnull
         {
             // Validate parameters.
             if (source == null) throw new ArgumentNullException(nameof(source));
@@ -20,7 +22,9 @@ namespace Ofl.Linq
 
         public static ReadOnlyDictionary<TKey, TValue> ToReadOnlyDictionary<TKey, TValue>(
             this IEnumerable<TValue> source, Func<TValue, TKey> keySelector,
-            IEqualityComparer<TKey> comparer)
+            IEqualityComparer<TKey> comparer
+        )
+        where TKey : notnull
         {
             // Validate parameters.
             if (source == null) throw new ArgumentNullException(nameof(source));
@@ -34,7 +38,9 @@ namespace Ofl.Linq
         public static ReadOnlyDictionary<TKey, TValue> ToReadOnlyDictionary<TSource, TKey, TValue>(
             this IEnumerable<TSource> source, Func<TSource, TKey> keySelector,
             Func<TSource, TValue> elementSelector,
-            IEqualityComparer<TKey> comparer)
+            IEqualityComparer<TKey> comparer
+        )
+        where TKey : notnull
         {
             // Validate parameters.
             if (source == null) throw new ArgumentNullException(nameof(source));
@@ -48,7 +54,9 @@ namespace Ofl.Linq
 
         public static ReadOnlyDictionary<TKey, TValue> ToReadOnlyDictionary<TSource, TKey, TValue>(
             this IEnumerable<TSource> source, Func<TSource, TKey> keySelector,
-            Func<TSource, TValue> elementSelector)
+            Func<TSource, TValue> elementSelector
+        )
+        where TKey : notnull
         {
             // Validate parameters.
             if (source == null) throw new ArgumentNullException(nameof(source));
@@ -60,7 +68,9 @@ namespace Ofl.Linq
         }
 
         public static ReadOnlyDictionary<TKey, TValue> ToReadOnlyDictionary<TKey, TValue>(
-            this IEnumerable<KeyValuePair<TKey, TValue>> source)
+            this IEnumerable<KeyValuePair<TKey, TValue>> source
+        )
+        where TKey : notnull
         {
             // Validate parameters.
             if (source == null) throw new ArgumentNullException(nameof(source));
@@ -71,7 +81,9 @@ namespace Ofl.Linq
         }
 
         public static ReadOnlyDictionary<TKey, TValue> ToReadOnlyDictionary<TKey, TValue>(
-            this IEnumerable<KeyValuePair<TKey, TValue>> source, IEqualityComparer<TKey> comparer)
+            this IEnumerable<KeyValuePair<TKey, TValue>> source, IEqualityComparer<TKey> comparer
+        )
+        where TKey : notnull
         {
             // Validate parameters.
             if (source == null) throw new ArgumentNullException(nameof(source));

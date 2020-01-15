@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 
 namespace Ofl.Linq
 {
@@ -66,7 +65,7 @@ namespace Ofl.Linq
         /// another sequence)</returns>
         /// 
         //////////////////////////////////////////////////
-        private static IEnumerable<IEnumerable<T>> ShingleImplementation<T>(this IEnumerable<T> source, int count,
+        private static IEnumerable<IReadOnlyList<T>> ShingleImplementation<T>(this IEnumerable<T> source, int count,
             bool yieldRemainder)
         {
             // Validate parameters.
@@ -75,6 +74,9 @@ namespace Ofl.Linq
 
             // The stack of shingles.
             var shingles = new Queue<IList<T>>();
+
+            // TODO: Create implementation that for materialized items, will window over the
+            // materialized list, instead of iterating and recreating items.
 
             // Cycle through the token stream.
             // TODO: Do not store in list, cycle through enumerator.
@@ -94,18 +96,16 @@ namespace Ofl.Linq
 
                     // If the shingle is the size of the
                     // max, return it.
-                    if (shingle.Count == count)
-                    {
-                        // The dequeue is not true.
-                        Debug.Assert(!dequeue);
+                    if (shingle.Count != count) continue;
 
-                        // Yield the item.
-                        // TODO: To read only collection.
-                        yield return shingle.Select(w => w);
+                    // The dequeue is not true.
+                    Debug.Assert(!dequeue);
 
-                        // Set the dequeue flag to true.
-                        dequeue = true;
-                    }
+                    // Yield the item.
+                    yield return shingle.WrapInReadOnlyCollection();
+
+                    // Set the dequeue flag to true.
+                    dequeue = true;
                 }
 
                 // Dequeue if necessary.
@@ -113,7 +113,7 @@ namespace Ofl.Linq
             }
 
             // If there are shingles left and yielding them, yield those.
-            if (yieldRemainder) foreach (IList<T> shingle in shingles) yield return shingle.Select(w => w);
+            if (yieldRemainder) foreach (IList<T> shingle in shingles) yield return shingle.WrapInReadOnlyCollection();
         }
 
         #endregion
