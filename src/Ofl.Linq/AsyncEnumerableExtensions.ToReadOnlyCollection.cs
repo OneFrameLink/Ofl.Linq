@@ -8,7 +8,7 @@ namespace Ofl.Linq
 {
     public static partial class AsyncEnumerableExtensions
     {
-        public static async Task<ReadOnlyCollection<T>> ToReadOnlyCollection<T>(
+        public static async ValueTask<ReadOnlyCollection<T>> ToReadOnlyCollection<T>(
             this IAsyncEnumerable<T> source,
             CancellationToken cancellationToken = default
         )

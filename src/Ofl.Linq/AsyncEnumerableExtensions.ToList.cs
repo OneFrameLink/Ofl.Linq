@@ -7,7 +7,7 @@ namespace Ofl.Linq
 {
     public static partial class AsyncEnumerableExtensions
     {
-        public static async Task<List<T>> ToListAsync<T>(
+        public static async ValueTask<List<T>> ToListAsync<T>(
             this IAsyncEnumerable<T> source,
             CancellationToken cancellationToken = default
         )

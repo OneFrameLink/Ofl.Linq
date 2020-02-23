@@ -7,7 +7,7 @@ namespace Ofl.Linq
 {
     public static partial class EnumerableExtensions
     {
-        public static Task<Dictionary<TKey, TSource>> ToDictionaryAsync<TSource, TKey>(
+        public static ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TSource, TKey>(
             this IAsyncEnumerable<TSource> source,
             Func<TSource, TKey> keySelector,
             CancellationToken cancellationToken = default
@@ -19,7 +19,7 @@ namespace Ofl.Linq
                 cancellationToken
             );
 
-        public static Task<Dictionary<TKey, TValue>> ToDictionaryAsync<TSource, TKey, TValue>(
+        public static ValueTask<Dictionary<TKey, TValue>> ToDictionaryAsync<TSource, TKey, TValue>(
             this IAsyncEnumerable<TSource> source,
             Func<TSource, TKey> keySelector,
             Func<TSource, TValue> elementSelector,
@@ -33,7 +33,7 @@ namespace Ofl.Linq
                 cancellationToken
             );
 
-        public static Task<Dictionary<TKey, TSource>> ToDictionaryAsync<TSource, TKey>(
+        public static ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TSource, TKey>(
             this IAsyncEnumerable<TSource> source,
             Func<TSource, TKey> keySelector,
             IEqualityComparer<TKey> comparer,
@@ -42,7 +42,7 @@ namespace Ofl.Linq
         where TKey : notnull
             => source.ToDictionaryAsync(keySelector, s => s, comparer, cancellationToken);
 
-        public static async Task<Dictionary<TKey, TValue>> ToDictionaryAsync<TSource, TKey, TValue>(
+        public static async ValueTask<Dictionary<TKey, TValue>> ToDictionaryAsync<TSource, TKey, TValue>(
             this IAsyncEnumerable<TSource> source, 
             Func<TSource, TKey> keySelector,
             Func<TSource, TValue> elementSelector,

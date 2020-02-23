@@ -8,7 +8,7 @@ namespace Ofl.Linq
 {
     public static partial class EnumerableExtensions
     {
-        public static Task<ReadOnlyDictionary<TKey, TSource>> ToReadOnlyDictionary<TSource, TKey>(
+        public static ValueTask<ReadOnlyDictionary<TKey, TSource>> ToReadOnlyDictionary<TSource, TKey>(
             this IAsyncEnumerable<TSource> source,
             Func<TSource, TKey> keySelector,
             CancellationToken cancellationToken = default
@@ -20,7 +20,7 @@ namespace Ofl.Linq
                 cancellationToken
             );
 
-        public static Task<ReadOnlyDictionary<TKey, TValue>> ToReadOnlyDictionary<TSource, TKey, TValue>(
+        public static ValueTask<ReadOnlyDictionary<TKey, TValue>> ToReadOnlyDictionary<TSource, TKey, TValue>(
             this IAsyncEnumerable<TSource> source,
             Func<TSource, TKey> keySelector,
             Func<TSource, TValue> elementSelector,
@@ -34,7 +34,7 @@ namespace Ofl.Linq
                 cancellationToken
             );
 
-        public static Task<ReadOnlyDictionary<TKey, TSource>> ToReadOnlyDictionary<TSource, TKey>(
+        public static ValueTask<ReadOnlyDictionary<TKey, TSource>> ToReadOnlyDictionary<TSource, TKey>(
             this IAsyncEnumerable<TSource> source,
             Func<TSource, TKey> keySelector,
             IEqualityComparer<TKey> comparer,
@@ -43,7 +43,7 @@ namespace Ofl.Linq
         where TKey : notnull
             => source.ToReadOnlyDictionary(keySelector, s => s, comparer, cancellationToken);
 
-        public static async Task<ReadOnlyDictionary<TKey, TValue>> ToReadOnlyDictionary<TSource, TKey, TValue>(
+        public static async ValueTask<ReadOnlyDictionary<TKey, TValue>> ToReadOnlyDictionary<TSource, TKey, TValue>(
             this IAsyncEnumerable<TSource> source, 
             Func<TSource, TKey> keySelector,
             Func<TSource, TValue> elementSelector,
