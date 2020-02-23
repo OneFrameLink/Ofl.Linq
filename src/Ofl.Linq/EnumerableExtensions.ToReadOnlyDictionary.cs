@@ -7,7 +7,7 @@ namespace Ofl.Linq
 {
     public static partial class EnumerableExtensions
     {
-        public static ReadOnlyDictionary<TKey, TValue> ToReadOnlyDictionaryAsync<TKey, TValue>(
+        public static ReadOnlyDictionary<TKey, TValue> ToReadOnlyDictionary<TKey, TValue>(
             this IEnumerable<TValue> source, Func<TValue, TKey> keySelector
         )
         where TKey : notnull
@@ -20,7 +20,7 @@ namespace Ofl.Linq
             return source.ToDictionary(keySelector).WrapInReadOnlyDictionary();
         }
 
-        public static ReadOnlyDictionary<TKey, TValue> ToReadOnlyDictionaryAsync<TKey, TValue>(
+        public static ReadOnlyDictionary<TKey, TValue> ToReadOnlyDictionary<TKey, TValue>(
             this IEnumerable<TValue> source, Func<TValue, TKey> keySelector,
             IEqualityComparer<TKey> comparer
         )
@@ -35,7 +35,7 @@ namespace Ofl.Linq
             return source.ToDictionary(keySelector, comparer).WrapInReadOnlyDictionary();
         }
 
-        public static ReadOnlyDictionary<TKey, TValue> ToReadOnlyDictionaryAsync<TSource, TKey, TValue>(
+        public static ReadOnlyDictionary<TKey, TValue> ToReadOnlyDictionary<TSource, TKey, TValue>(
             this IEnumerable<TSource> source, Func<TSource, TKey> keySelector,
             Func<TSource, TValue> elementSelector,
             IEqualityComparer<TKey> comparer
@@ -52,7 +52,7 @@ namespace Ofl.Linq
             return source.ToDictionary(keySelector, elementSelector, comparer).WrapInReadOnlyDictionary();
         }
 
-        public static ReadOnlyDictionary<TKey, TValue> ToReadOnlyDictionaryAsync<TSource, TKey, TValue>(
+        public static ReadOnlyDictionary<TKey, TValue> ToReadOnlyDictionary<TSource, TKey, TValue>(
             this IEnumerable<TSource> source, Func<TSource, TKey> keySelector,
             Func<TSource, TValue> elementSelector
         )
@@ -67,7 +67,7 @@ namespace Ofl.Linq
             return source.ToDictionary(keySelector, elementSelector).WrapInReadOnlyDictionary();
         }
 
-        public static ReadOnlyDictionary<TKey, TValue> ToReadOnlyDictionaryAsync<TKey, TValue>(
+        public static ReadOnlyDictionary<TKey, TValue> ToReadOnlyDictionary<TKey, TValue>(
             this IEnumerable<KeyValuePair<TKey, TValue>> source
         )
         where TKey : notnull
@@ -80,7 +80,7 @@ namespace Ofl.Linq
                 p => p.Key, p => p.Value, EqualityComparer<TKey>.Default));
         }
 
-        public static ReadOnlyDictionary<TKey, TValue> ToReadOnlyDictionaryAsync<TKey, TValue>(
+        public static ReadOnlyDictionary<TKey, TValue> ToReadOnlyDictionary<TKey, TValue>(
             this IEnumerable<KeyValuePair<TKey, TValue>> source, IEqualityComparer<TKey> comparer
         )
         where TKey : notnull
