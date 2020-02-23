@@ -8,42 +8,42 @@ namespace Ofl.Linq
 {
     public static partial class EnumerableExtensions
     {
-        public static ValueTask<ReadOnlyDictionary<TKey, TSource>> ToReadOnlyDictionary<TSource, TKey>(
+        public static ValueTask<ReadOnlyDictionary<TKey, TSource>> ToReadOnlyDictionaryAsync<TSource, TKey>(
             this IAsyncEnumerable<TSource> source,
             Func<TSource, TKey> keySelector,
             CancellationToken cancellationToken = default
         )
         where TKey : notnull =>
-            source.ToReadOnlyDictionary(
+            source.ToReadOnlyDictionaryAsync(
                 keySelector,
                 s => s,
                 cancellationToken
             );
 
-        public static ValueTask<ReadOnlyDictionary<TKey, TValue>> ToReadOnlyDictionary<TSource, TKey, TValue>(
+        public static ValueTask<ReadOnlyDictionary<TKey, TValue>> ToReadOnlyDictionaryAsync<TSource, TKey, TValue>(
             this IAsyncEnumerable<TSource> source,
             Func<TSource, TKey> keySelector,
             Func<TSource, TValue> elementSelector,
             CancellationToken cancellationToken = default
         )
         where TKey : notnull =>
-            source.ToReadOnlyDictionary(
+            source.ToReadOnlyDictionaryAsync(
                 keySelector, 
                 elementSelector, 
                 EqualityComparer<TKey>.Default, 
                 cancellationToken
             );
 
-        public static ValueTask<ReadOnlyDictionary<TKey, TSource>> ToReadOnlyDictionary<TSource, TKey>(
+        public static ValueTask<ReadOnlyDictionary<TKey, TSource>> ToReadOnlyDictionaryAsync<TSource, TKey>(
             this IAsyncEnumerable<TSource> source,
             Func<TSource, TKey> keySelector,
             IEqualityComparer<TKey> comparer,
             CancellationToken cancellationToken = default
         )
         where TKey : notnull
-            => source.ToReadOnlyDictionary(keySelector, s => s, comparer, cancellationToken);
+            => source.ToReadOnlyDictionaryAsync(keySelector, s => s, comparer, cancellationToken);
 
-        public static async ValueTask<ReadOnlyDictionary<TKey, TValue>> ToReadOnlyDictionary<TSource, TKey, TValue>(
+        public static async ValueTask<ReadOnlyDictionary<TKey, TValue>> ToReadOnlyDictionaryAsync<TSource, TKey, TValue>(
             this IAsyncEnumerable<TSource> source, 
             Func<TSource, TKey> keySelector,
             Func<TSource, TValue> elementSelector,
