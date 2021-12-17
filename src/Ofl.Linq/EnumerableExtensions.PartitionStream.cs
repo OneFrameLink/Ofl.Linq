@@ -5,18 +5,20 @@ namespace Ofl.Linq
 {
     public static partial class EnumerableExtensions
     {
-        public static IEnumerable<IEnumerable<T>> Chunk<T>(this IEnumerable<T> source,
-            int size)
+        public static IEnumerable<IEnumerable<T>> PartitionStream<T>(
+            this IEnumerable<T> source,
+            int size
+        )
         {
             // Validate parameters.
             if (source == null) throw new ArgumentNullException(nameof(source));
             if (size <= 0) throw new ArgumentOutOfRangeException(nameof(size), size, $"The { nameof(size) } parameter must be a positive value.");
 
             // Call the internal implementation.
-            return source.ChunkImplementation(size);
+            return source.PartitionStreamImplementation(size);
         }
 
-        private static IEnumerable<IEnumerable<T>> ChunkImplementation<T>(
+        private static IEnumerable<IEnumerable<T>> PartitionStreamImplementation<T>(
             this IEnumerable<T> source, int size)
         {
             // Validate parameters.
@@ -33,11 +35,11 @@ namespace Ofl.Linq
                 if (!enumerator.MoveNext()) yield break;
 
                 // Return the chunked sequence.
-                yield return ChunkSequence(enumerator, size);
+                yield return PartitionStreamSequence(enumerator, size);
             } while (true);
         }
 
-        private static IEnumerable<T> ChunkSequence<T>(IEnumerator<T> enumerator,
+        private static IEnumerable<T> PartitionStreamSequence<T>(IEnumerator<T> enumerator,
             int size)
         {
             // Validate parameters.
